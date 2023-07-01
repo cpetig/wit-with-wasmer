@@ -1,0 +1,11 @@
+[package]
+name = "wasmer-host"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+adapter = { version = "0.1.0", path = "../adapter" }
+anyhow = "1.0.71"
+wasmer = "4.0.0"
