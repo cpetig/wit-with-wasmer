@@ -1,5 +1,8 @@
 use anyhow::{self, Result};
 use wasmer::{Store, Module, Instance, Value, imports};
+use adapter::wasmtime;
+
+wasmtime::component::bindgen!({ path: "../wit/test.wit", world: "testw" });
 
 fn main() -> Result<()> {
     let mut store = Store::default();
