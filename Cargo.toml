@@ -1,0 +1,3 @@
+[workspace]
+members = [ "wasmtime-host", "plugin" ]
+resolver = "2"

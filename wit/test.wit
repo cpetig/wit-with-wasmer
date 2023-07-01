@@ -1,0 +1,5 @@
+package testn:testp
+
+world testw {
+    export testfun: func(input: string) -> string
+}
