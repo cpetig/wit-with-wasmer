@@ -5,7 +5,9 @@ pub struct Store;
 pub trait AsContextMut {
     type Data;
 
-    fn as_context_mut(&mut self) -> Store { Store{} }
+    fn as_context_mut(&mut self) -> Store {
+        Store {}
+    }
 }
 
 pub use anyhow::Result;
