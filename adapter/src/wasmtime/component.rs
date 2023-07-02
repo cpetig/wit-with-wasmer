@@ -38,11 +38,20 @@ impl<A, R> TypedFunc<A, R> {
 #[derive(Copy, Clone, Debug)]
 pub struct Func;
 pub struct Component;
+impl Component {
+    pub fn from_binary(engine: &wasmer::Engine, module: &wasmer::Module) -> Result<Self> {
+        todo!()
+    }
+}
 
 pub struct Linker<T> {
     phantom: PhantomData<T>,
 }
 impl<T> Linker<T> {
+    pub fn new(engine: &wasmer::Engine) -> Self {
+        todo!()
+    }
+
     pub fn instantiate(
         &self,
         store: impl crate::wasmtime::AsContextMut<Data = T>,

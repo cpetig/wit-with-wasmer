@@ -38,6 +38,19 @@ impl<'a, T: AsContext> AsContext for &mut T {
         todo!()
     }
 }
+type DefaultDataType = i32;
+impl AsContextMut for &mut wasmer::Store {
+    fn as_context_mut(&mut self) -> StoreContextMut<'_, DefaultDataType> {
+        todo!()
+    }
+}
+impl AsContext for &mut wasmer::Store {
+    type Data = DefaultDataType;
+
+    fn as_context(&self) -> StoreContext<'_, DefaultDataType> {
+        todo!()
+    }
+}
 
 use std::marker::PhantomData;
 

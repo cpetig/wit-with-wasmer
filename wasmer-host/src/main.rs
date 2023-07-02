@@ -1,4 +1,7 @@
-use adapter::wasmtime::{self, component::{Linker, Component}};
+use adapter::wasmtime::{
+    self,
+    component::{Component, Linker},
+};
 use anyhow::{self, Result};
 use wasmer::{imports, Instance, Module, Store, Value};
 
