@@ -1,6 +1,6 @@
 use anyhow::Result;
 use std::marker::PhantomData;
-use wasmer::Store;
+// use wasmer::Store;
 
 pub use wasmtime::component::bindgen;
 
@@ -9,14 +9,15 @@ pub mod __internal {
 }
 
 //pub struct Store;
-pub struct Callable {}
-impl Callable {
-    pub fn call<A>(
-        &self,
-        store: &mut impl crate::wasmtime::AsContextMut<Data = ()>,
-        args: A,
-    ) -> Result<()> {
+pub struct Callable<A, R> {
+    phantom: PhantomData<(A, R)>,
+}
+impl<A, R> Callable<A, R> {
+    pub fn call(&self, store: impl crate::wasmtime::AsContextMut, args: A) -> Result<R> {
         todo!();
+    }
+    pub fn post_return(&self, store: impl crate::wasmtime::AsContextMut) -> Result<()> {
+        todo!()
     }
 }
 
@@ -24,11 +25,17 @@ pub struct TypedFunc<A, R> {
     phantom: PhantomData<(A, R)>,
 }
 impl<A, R> TypedFunc<A, R> {
-    pub fn new_unchecked(f: Func) -> Callable {
-        Callable {}
+    pub fn new_unchecked(f: Func) -> Callable<A, R> {
+        Callable {
+            phantom: PhantomData,
+        }
+    }
+    pub fn func(&self) -> &Func {
+        todo!();
     }
 }
 
+#[derive(Copy, Clone, Debug)]
 pub struct Func;
 pub struct Component;
 
@@ -37,8 +44,8 @@ pub struct Linker<T> {
 }
 impl<T> Linker<T> {
     pub fn instantiate(
-        &mut self,
-        store: &mut impl crate::wasmtime::AsContextMut<Data = T>,
+        &self,
+        store: impl crate::wasmtime::AsContextMut<Data = T>,
         component: &Component,
     ) -> Result<Instance> {
         todo!();
@@ -47,21 +54,24 @@ impl<T> Linker<T> {
 
 pub struct Exports;
 impl Exports {
-    pub fn root(&self) -> Symboltable {
+    pub fn root(&self) -> ExportInstance {
         todo!()
     }
 }
 
-pub struct Symboltable;
-impl Symboltable {
-    pub fn typed_func(&self, name: &str) -> Result<()> {
+pub struct ExportInstance;
+impl ExportInstance {
+    pub fn typed_func<A, R>(&self, name: &str) -> Result<TypedFunc<A, R>> {
         todo!()
     }
 }
 
 pub struct Instance;
 impl Instance {
-    pub fn exports<T>(&self, store: &mut impl crate::wasmtime::AsContextMut<Data = T>) -> Exports {
+    pub fn exports<'a, T: 'a>(
+        &self,
+        store: &mut impl Into<crate::wasmtime::StoreContextMut<'a, T>>,
+    ) -> Exports {
         Exports {}
     }
 }
@@ -71,8 +81,8 @@ pub struct InstancePre<T> {
 }
 impl<T> InstancePre<T> {
     pub fn instantiate(
-        &mut self,
-        store: &mut impl crate::wasmtime::AsContextMut<Data = T>,
+        &self,
+        store: impl crate::wasmtime::AsContextMut<Data = T>,
     ) -> Result<Instance> {
         todo!();
     }

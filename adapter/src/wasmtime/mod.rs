@@ -1,19 +1,48 @@
 pub mod component;
 
-pub struct Store;
+pub struct Store<T>(PhantomData<T>);
+pub struct StoreContext<'a, T>(&'a Store<T>);
+pub struct StoreContextMut<'a, T>(&'a mut Store<T>);
 
-pub trait AsContextMut {
+pub trait AsContext {
     type Data;
 
-    fn as_context_mut(&mut self) -> Store {
-        Store {}
+    fn as_context(&self) -> StoreContext<'_, Self::Data>;
+}
+
+pub trait AsContextMut: AsContext {
+    fn as_context_mut(&mut self) -> StoreContextMut<'_, Self::Data>;
+}
+
+impl<'a, T> AsContextMut for StoreContextMut<'a, T> {
+    fn as_context_mut(&mut self) -> StoreContextMut<'_, Self::Data> {
+        todo!()
     }
 }
+impl<'a, T> AsContext for StoreContextMut<'a, T> {
+    type Data = T;
+
+    fn as_context(&self) -> StoreContext<'_, Self::Data> {
+        todo!()
+    }
+}
+impl<'a, U: AsContextMut> AsContextMut for &mut U {
+    fn as_context_mut(&mut self) -> StoreContextMut<'_, Self::Data> {
+        todo!()
+    }
+}
+impl<'a, T: AsContext> AsContext for &mut T {
+    type Data = T::Data;
+
+    fn as_context(&self) -> StoreContext<'_, Self::Data> {
+        todo!()
+    }
+}
+
+use std::marker::PhantomData;
 
 pub use anyhow::Result;
 
 //struct SomeContext<T> ;
 
-impl AsContextMut for Store {
-    type Data = ();
-}
+//impl<T> AsContextMut<Data = T> for Store<T> {}
