@@ -63,9 +63,13 @@ impl<T> Linker<T> {
         store: impl crate::wasmtime::AsContextMut<Data = T>,
         component: &Component,
     ) -> Result<Instance> {
-        todo!();
         // register functions?
         //Ok(Instance(component))
+        Ok(Instance(wasmer::Instance::new(
+            &mut store,
+            component.0,
+            &wasmer::Imports::new(),
+        )?))
     }
 }
 
@@ -83,7 +87,7 @@ impl ExportInstance {
     }
 }
 
-pub struct Instance; //<'a>(&'a Component<'a>);
+pub struct Instance(wasmer::Instance); //<'a>(&'a Component<'a>);
 impl Instance {
     pub fn exports<'a, T: 'a>(
         &self,
