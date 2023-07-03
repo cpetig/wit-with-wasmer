@@ -37,10 +37,13 @@ impl<A, R> TypedFunc<A, R> {
 
 #[derive(Copy, Clone, Debug)]
 pub struct Func;
-pub struct Component;
-impl Component {
-    pub fn from_binary(engine: &wasmer::Engine, module: &wasmer::Module) -> Result<Self> {
-        todo!()
+pub struct Component<'a>(&'a wasmer::Module);
+impl<'a> Component<'a> {
+    pub fn from_binary(
+        engine: &wasmer::Engine,
+        module: &'a wasmer::Module,
+    ) -> Result<Component<'a>> {
+        Ok(Component(module))
     }
 }
 
@@ -49,7 +52,10 @@ pub struct Linker<T> {
 }
 impl<T> Linker<T> {
     pub fn new(engine: &wasmer::Engine) -> Self {
-        todo!()
+        // I don't think there is anything to do
+        Linker {
+            phantom: PhantomData,
+        }
     }
 
     pub fn instantiate(
@@ -58,6 +64,8 @@ impl<T> Linker<T> {
         component: &Component,
     ) -> Result<Instance> {
         todo!();
+        // register functions?
+        //Ok(Instance(component))
     }
 }
 
@@ -75,7 +83,7 @@ impl ExportInstance {
     }
 }
 
-pub struct Instance;
+pub struct Instance; //<'a>(&'a Component<'a>);
 impl Instance {
     pub fn exports<'a, T: 'a>(
         &self,
