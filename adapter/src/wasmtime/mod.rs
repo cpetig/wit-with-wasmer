@@ -67,7 +67,7 @@ impl<T> Deref for Store<T> {
 }
 impl<T> AsContextMut for Store<T> {
     fn as_context_mut(&mut self) -> StoreContextMut<'_, T> {
-        todo!()
+        StoreContextMut(self, PhantomData)
     }
 }
 impl<T> AsContext for Store<T> {
@@ -79,7 +79,7 @@ impl<T> AsContext for Store<T> {
 }
 impl<'a, U: AsContextMut> AsContextMut for &mut U {
     fn as_context_mut(&mut self) -> StoreContextMut<'_, Self::Data> {
-        todo!()
+        (*self).as_context_mut()
     }
 }
 impl<'a, T: AsContext> AsContext for &mut T {
