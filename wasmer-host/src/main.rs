@@ -1,9 +1,10 @@
 use adapter::wasmtime::{
     self,
     component::{Component, Linker},
+    Store,
 };
 use anyhow::{self, Result};
-use wasmer::{imports, Instance, Module, Store, Value};
+use wasmer::{imports, Instance, Module, Value};
 
 wasmtime::component::bindgen!({ path: "../wit/test.wit", world: "testw" });
 
@@ -13,7 +14,7 @@ fn main() -> Result<()> {
     let linker = Linker::new(engine);
 
     // load module in wasmer
-    let module = Module::from_file(&store, "target/wasm32-unknown-unknown/debug/plugin.wasm")?;
+    let module = Module::from_file(engine, "target/wasm32-unknown-unknown/debug/plugin.wasm")?;
 
     // create an adapter
     let component = Component::from_binary(engine, &module)?;

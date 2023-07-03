@@ -6,4 +6,5 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.71"
 wasmer = "4.0.0"
+wasmer-vm = "4.0.0"
 wasmtime = { git = "https://github.com/bytecodealliance/wasmtime", features = ["component-model"] }

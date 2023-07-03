@@ -1,5 +1,9 @@
 use anyhow::Result;
-use std::marker::PhantomData;
+use std::{
+    marker::PhantomData,
+    ops::{Deref, DerefMut},
+};
+use wasmer::AsStoreMut;
 // use wasmer::Store;
 
 pub use wasmtime::component::bindgen;
@@ -58,15 +62,17 @@ impl<T> Linker<T> {
         }
     }
 
-    pub fn instantiate(
+    pub fn instantiate<C: crate::wasmtime::AsContextMut<Data = T>>(
         &self,
-        store: impl crate::wasmtime::AsContextMut<Data = T>,
+        store: &mut C,
         component: &Component,
-    ) -> Result<Instance> {
+    ) -> Result<Instance>
+//where <C as Deref>::Target: DerefMut, <C as Deref>::Target: Sized, <<C as Deref>::Target as Deref>::Target: Sized
+    {
         // register functions?
         //Ok(Instance(component))
         Ok(Instance(wasmer::Instance::new(
-            &mut store,
+            store,
             component.0,
             &wasmer::Imports::new(),
         )?))
